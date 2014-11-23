@@ -7,7 +7,10 @@
     <script src="react-0.12.1/build/JSXTransformer.js"></script>
   </head>
   <body>
-    <div id="content"></div>
+    <div id="content">
+        <div id="form"></div>
+        <div id="conjugations"></div>
+    </div>
     <script type="text/jsx">
         'use strict';
 
@@ -174,12 +177,35 @@
             }
         });
 
-        // Conjugate.
-        var verb = 'werken';
-        var conjugations = dutchConjugator.conjugate(verb);
+        var InputForm = React.createClass({
+            handleSubmit : function(e) {
+                e.preventDefault();
+                var verb = this.refs.verb.getDOMNode().value.trim();
+                if (!verb) {
+                    return;
+                }
+
+                var conjugations = dutchConjugator.conjugate(verb);
+
+                React.render(
+                    <ConjugationTable conjugations={conjugations} />,
+                    document.getElementById('conjugations')
+                );
+            },
+            render: function() {
+                return (
+                    <form className="inputForm" onSubmit={this.handleSubmit}>
+                        <input type="text" placeholder="Your verb" ref="verb" />
+                        <input type="submit" value="Conjugate" />
+                    </form>
+                );
+            }
+        });
+
+        // Render form.
         React.render(
-            <ConjugationTable conjugations={conjugations} />,
-            document.getElementById('content')
+            <InputForm/>,
+            document.getElementById('form')
         );
     </script>
   </body>
