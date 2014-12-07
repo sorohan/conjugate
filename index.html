@@ -2,7 +2,9 @@
 <html>
   <head>
     <title>Dutch Conjugation</title>
-    <script src="lodash.js"></script>
+    <script src="js/vendor/lodash/lodash.js"></script>
+    <script src="js/conjugator.js"></script>
+    <script src="js/conjugators/netherlands.js"></script>
     <script src="react-0.12.1/build/react.js"></script>
     <script src="react-0.12.1/build/JSXTransformer.js"></script>
   </head>
@@ -14,125 +16,27 @@
     <script type="text/jsx">
         'use strict';
 
-        var TENSE = {
-            PRESENT : 'Present',
-            PAST : 'Past'
-        };
 
-        var SUBJECT = {
-            FIRST_PERSON_SINGULAR  : 'ik',
-            SECOND_PERSON_SINGULAR : 'je/u',
-            THIRD_PERSON_SINGULAR  : 'he/she/it',
-            FIRST_PERSON_PLURAL    : 'we',
-            SECOND_PERSON_PLURAL   : 'jullie',
-            THIRD_PERSON_PLURAL    : 'ze'
-        };
-
-        var Conjugator = function() {
-            this.tenseRules = { };
-        };
-
-        Conjugator.prototype.addTenseRules = function(tense, ruleset) {
-            this.tenseRules[tense] = ruleset;
-        };
-
-        Conjugator.prototype.conjugate = function(verb) {
-            var conjugations = {};
-            var self = this;
-            Object.keys(self.tenseRules).forEach(function(tense) {
-                var tenseConjugation = { };
-                var rules = self.tenseRules[tense];
-                Object.keys(rules).forEach(function(subject) {
-                    var rule = rules[subject];
-                    tenseConjugation[subject] = rule.call(self, verb);
-                });
-
-                conjugations[tense] = tenseConjugation;
-            });
-
-            return conjugations;
-        };
-
-        //
-        // Create a dutch conjugator.
-        //
-        // @see http://www.dutchgrammar.com/en/?n=Verbs.re01
-        //
-        var dutchConjugator = new Conjugator();
-        dutchConjugator.helpers = { };
-        dutchConjugator.helpers.getStem = function(verb) {
-            return verb.replace(/(.+)en$/, '\$1');
-        };
-        dutchConjugator.helpers.getCrudeStem = function(verb) {
-            // A few rules regarding the stem:
-            //  - Long vowel infinitives require long vowel stems.
-            //  - A stem never ends in two identical consonants.
-            //  - A stem never ends in v or z.
-            //  - The stem of an '-iën verb' ends in ie.
-            return _.compose(dutchConjugator.helpers.getStem); // todo: additional work for stem.
-        };
-
-        //
-        // Add rules for present tense.
-        //
-        var presentRules = { };
-        // 1st person singular "I", use the stem.
-        presentRules[SUBJECT.FIRST_PERSON_SINGULAR] = dutchConjugator.helpers.getStem;
-        // 2nd person singular "you", same as first, plus a 't'.
-        // Same for 3rd person singular "he/she/it".
-        presentRules[SUBJECT.SECOND_PERSON_SINGULAR] =
-        presentRules[SUBJECT.THIRD_PERSON_SINGULAR] = _.compose(
-            function(stem) {
-                return stem + 't';
-            },
-            dutchConjugator.helpers.getStem
-        );
-        // All plural forms "we/y'all/they", same as infinitive.
-        presentRules[SUBJECT.FIRST_PERSON_PLURAL] = 
-        presentRules[SUBJECT.SECOND_PERSON_PLURAL] = 
-        presentRules[SUBJECT.THIRD_PERSON_PLURAL] = function(verb) {
-            return verb;
-        };
-        dutchConjugator.addTenseRules(TENSE.PRESENT, presentRules);
-
-        //
-        // Add rules for past tense.
-        //
-        var pastRules = { };
-        // 1st person singular "I", stem + 'te'.
-        // Same for 2nd person singular "you", and 3rd person singular "he/she/it".
-        pastRules[SUBJECT.FIRST_PERSON_SINGULAR] =
-        pastRules[SUBJECT.SECOND_PERSON_SINGULAR] =
-        pastRules[SUBJECT.THIRD_PERSON_SINGULAR] = _.compose(
-            function(stem) {
-                return stem + 'te';
-            },
-            dutchConjugator.helpers.getStem
-        );
-        // All plural forms "we/y'all/they", first person + n.
-        pastRules[SUBJECT.FIRST_PERSON_PLURAL] = 
-        pastRules[SUBJECT.SECOND_PERSON_PLURAL] = 
-        pastRules[SUBJECT.THIRD_PERSON_PLURAL] = _.compose(
-            function(fp) {
-                return fp + 'n';
-            },
-            pastRules[SUBJECT.FIRST_PERSON_SINGULAR]
-        );
-        dutchConjugator.addTenseRules(TENSE.PAST, pastRules);
+        var dutchConjugator = new NetherlandsConjugator();
 
         //
         // Begin React components.
         //
 
-        var ConjugationTable = React.createClass({
+        var ConjugationView = React.createClass({
             render : function() {
                 var self = this;
-                var conjugationTenses = Object.keys(this.props.conjugations).map(function(tense) {
-                    var tenseConjugation = self.props.conjugations[tense];
+                var conjugations = this.props.conjugation.conjugations;
+
+                var conjugationTenses = Object.keys(conjugations).map(function(tense) {
+                    var tenseConjugation = conjugations[tense];
                     return (
-                        <ConjugationTense tense={tense} conjugation={tenseConjugation} />
+                        <TenseConjugationView conjugation={tenseConjugation} />
                     );
                 });
+
+                debugger;
+
                 // http://facebook.github.io/react/docs/tutorial.html
                 // http://www.verbix.com/webverbix/go.php?T1=weten&Submit=Go&D1=24&H1=124
                 return (
@@ -143,28 +47,31 @@
             }
         });
 
-        var ConjugationTense = React.createClass({
+        var TenseConjugationView = React.createClass({
             render : function() {
-                // tense: "Present"
-                // conjugation: { "ik" : "weet" }
                 var self = this;
-                var conjugations = Object.keys(this.props.conjugation).map(function(subject) {
-                    var verb = self.props.conjugation[subject];
+                var conjugations = this.props.conjugation.conjugations;
+
+                var conjugationComponents = Object.keys(conjugations).map(function(subject) {
+                    var verb = conjugations[subject];
                     return (
-                        <Conjugation subject={subject} verb={verb} />
+                        <SubjectTenseConjugationView subject={subject} verb={verb} />
                     );
                 });
+
+                debugger;
+
                 return (
                     <div className="conjugationTense">
-                        {this.props.tense}
+                        {this.props.conjugation.tense}
 
-                        {conjugations}
+                        {conjugationComponents}
                     </div>
                 );
             }
         });
 
-        var Conjugation = React.createClass({
+        var SubjectTenseConjugationView = React.createClass({
             render : function() {
                 // subject: "ik"
                 // verb: "weet"
@@ -185,10 +92,11 @@
                     return;
                 }
 
-                var conjugations = dutchConjugator.conjugate(verb);
+                var conjugation = dutchConjugator.conjugate(verb);
+                debugger;
 
                 React.render(
-                    <ConjugationTable conjugations={conjugations} />,
+                    <ConjugationView conjugation={conjugation} />,
                     document.getElementById('conjugations')
                 );
             },
