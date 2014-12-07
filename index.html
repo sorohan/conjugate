@@ -3,8 +3,8 @@
   <head>
     <title>Dutch Conjugation</title>
     <script src="js/vendor/lodash/lodash.js"></script>
-    <script src="js/conjugator.js"></script>
-    <script src="js/conjugators/netherlands.js"></script>
+    <script src="build/js/conjugator.js"></script>
+    <script src="build/js/conjugators/netherlands.js"></script>
     <script src="react-0.12.1/build/react.js"></script>
     <script src="react-0.12.1/build/JSXTransformer.js"></script>
   </head>
@@ -35,8 +35,6 @@
                     );
                 });
 
-                debugger;
-
                 // http://facebook.github.io/react/docs/tutorial.html
                 // http://www.verbix.com/webverbix/go.php?T1=weten&Submit=Go&D1=24&H1=124
                 return (
@@ -58,8 +56,6 @@
                         <SubjectTenseConjugationView subject={subject} verb={verb} />
                     );
                 });
-
-                debugger;
 
                 return (
                     <div className="conjugationTense">
@@ -93,7 +89,6 @@
                 }
 
                 var conjugation = dutchConjugator.conjugate(verb);
-                debugger;
 
                 React.render(
                     <ConjugationView conjugation={conjugation} />,
