@@ -45,12 +45,12 @@ NlHelper['isLongVowel'] = function(syllable: string) : boolean {
     }
 
     //  - single open vowel: a single vowel at the end of a syllable.
-    if (syllable.match(/(^|[^aeiou])[aeiou]$/)) {
+    if (syllable.match(/(^|[^aeiouy])[aeiouy]$/)) {
         return true;
     }
 
     //  - vowel combination: two different vowels in a row that merge into (more or less) one vowel.
-    return !!syllable.match(/[aeiou][aeiou]/); // todo: check specific vowel sets.
+    return !!syllable.match(/[aeiouy][aeiouy]/); // todo: check specific vowel sets.
 };
 
 NlHelper['isShortVowel'] = function(syllable: string) : boolean {
@@ -61,7 +61,7 @@ NlHelper['isShortVowel'] = function(syllable: string) : boolean {
     // When a word ends in a consonant, it is easy to see that the single vowel preceding this 
     // consonant is a short vowel: the word fregat (frigate) ends in a consonant (t) and is 
     // preceded by a single vowel (a), which is thus a short vowel.
-    if (syllable.match(/[^aeiou][aeiou][aeiou]$/)) {
+    if (syllable.match(/[^aeiouy][aeiouy][aeiouy]$/)) {
         return true;
     }
 
@@ -72,7 +72,7 @@ NlHelper['lengthenVowel'] = function(syllable: string) : string {
     // With the exception of y, each vowel has a short and a long form:
     // short   a [ɑ]   e [ɛ]   i [ɪ]   o [ɔ]   u [ʏ]
     // long    aa [a]  ee [e]  ie [i]  oo [o]  uu [y]
-    return syllable.replace(/([aeiou])/, '$1$1'); // todo: ie
+    return syllable.replace(/([aeiouy])/, '$1$1'); // todo: ie
 };
 
 NlHelper['syllableExplode'] = function(word: string) : string[] {
@@ -81,13 +81,13 @@ NlHelper['syllableExplode'] = function(word: string) : string[] {
 
     // Rule I
     // If two vowels are separated by only one consonant, the consonant forms the beginning of the second syllable.
-    if ((matches = word.match(/^([^aeiou]*[aeiou]+)([^aeiou][aeiou].*)/))) { // consonant?, vowel, consonant, vowel.
+    if ((matches = word.match(/^([^aeiouy]*[aeiouy]+)([^aeiouy][aeiouy].*)/))) { // consonant?, vowel, consonant, vowel.
         return [matches[1]].concat(NlHelper['syllableExplode'](matches[2]));
     }
 
     // Rule II
     // If vowels are separated by more than one consonant, the first syllable gets one consonant, the second the rest.
-    if ((matches = word.match(/^([^aeiou]*[aeiou]+[^aeiou])([^aeiou]+[[aeiou].*)/))) { // consonant?, vowel, consonant, vowel.
+    if ((matches = word.match(/^([^aeiouy]*[aeiouy]+[^aeiouy])([^aeiouy]+[[aeiouy].*)/))) { // consonant?, vowel, consonant, vowel.
         return [matches[1]].concat(NlHelper['syllableExplode'](matches[2]));
     }
 
