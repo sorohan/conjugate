@@ -109,6 +109,35 @@ describe("Testing Netherlands Language Helper", function() {
             expect(NlHelper['getStem'](item[0])).toBe(item[2]);
         });
     });
+
+    it("gets the verb stem, removing v or z ending", function() {
+        // infinitive, crude stem, stem.
+        var examples = [
+            [ 'leven', 'lev', 'leef' ],
+            [ 'lozen', 'loz', 'loos' ],
+            [ 'werven', 'werv', 'werf' ],
+            [ 'wuiven', 'wuiv', 'wuif' ],
+            [ 'beven', ' bev', 'beef' ],
+            [ 'durven', 'durv', 'durf' ],
+            [ 'bonzen', 'bonz', 'bons' ]
+        ];
+
+        examples.forEach(function(item) {
+            expect(NlHelper['getStem'](item[0])).toBe(item[2]);
+        });
+    });
+
+    it("gets the verb stem for a verb ending in ien", function() {
+        var examples = [
+            [ 'ruziën', 'ruzie' ],
+            [ 'skiën', 'skie' ],
+            [ 'oliën', 'olie' ]
+        ];
+
+        examples.forEach(function(item) {
+            expect(NlHelper['getStem'](item[0])).toBe(item[1]);
+        });
+    });
 });
 
 describe("Testing Netherlands Conjugator", function() {
@@ -123,7 +152,7 @@ describe("Testing Netherlands Conjugator", function() {
             {
                 'ik': 'werk',
                 'je/u': 'werkt',
-                'he/she/it': 'werkt',
+                'hij/ze/het': 'werkt',
                 'we': 'werken',
                 'jullie': 'werken',
                 'ze': 'werken'
@@ -141,7 +170,7 @@ describe("Testing Netherlands Conjugator", function() {
             {
                 'ik': 'werkte',
                 'je/u': 'werkte',
-                'he/she/it': 'werkte',
+                'hij/ze/het': 'werkte',
                 'we': 'werkten',
                 'jullie': 'werkten',
                 'ze': 'werkten'

@@ -24,7 +24,7 @@ var TENSE = {
 var SUBJECT = {
     FIRST_PERSON_SINGULAR  : 'ik',
     SECOND_PERSON_SINGULAR : 'je/u',
-    THIRD_PERSON_SINGULAR  : 'he/she/it',
+    THIRD_PERSON_SINGULAR  : 'hij/ze/het',
     FIRST_PERSON_PLURAL    : 'we',
     SECOND_PERSON_PLURAL   : 'jullie',
     THIRD_PERSON_PLURAL    : 'ze'
@@ -128,15 +128,34 @@ NlHelper['removeIdenticalConsonantStem'] = function(stem: string) : string {
     return stem.replace(/([^aeiouy])\1$/, '$1');
 };
 
-NlHelper['getStem'] = function(verb: string) : string {
-    var crudeStem = NlHelper['getCrudeStem'].call(this, verb);
+NlHelper['removeVZEnding'] = function(stem: string) : string {
+    if (stem.match(/v$/)) {
+        return stem.replace(/v$/, 'f');
+    }
+    else if (stem.match(/z$/)) {
+        return stem.replace(/z$/, 's');
+    }
+    else {
+        return stem;
+    }
+};
 
+NlHelper['getStem'] = function(verb: string) : string {
     // A few rules regarding the stem:
     //  - Long vowel infinitives require long vowel stems.
     //  - A stem never ends in two identical consonants.
     //  - A stem never ends in v or z.
     //  - The stem of an '-iën verb' ends in ie.
+    var crudeStem;
+
+    if (verb.match(/i[eë]n/)) {
+        return verb.replace(/i[eë]n/, 'ie');
+    }
+
+    crudeStem = NlHelper['getCrudeStem'].call(this, verb);
+
     return utils.compose(
+        NlHelper['removeVZEnding'],
         NlHelper['removeIdenticalConsonantStem'],
         NlHelper['longVowelStem']
     ).call(this, verb, crudeStem);
