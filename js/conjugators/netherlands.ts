@@ -124,6 +124,10 @@ NlHelper['longVowelStem'] = function(verb: string, stem: string) : string {
     return stemSyllables.join('');
 };
 
+NlHelper['removeIdenticalConsonantStem'] = function(stem: string) : string {
+    return stem.replace(/([^aeiouy])\1$/, '$1');
+};
+
 NlHelper['getStem'] = function(verb: string) : string {
     var crudeStem = NlHelper['getCrudeStem'].call(this, verb);
 
@@ -133,6 +137,7 @@ NlHelper['getStem'] = function(verb: string) : string {
     //  - A stem never ends in v or z.
     //  - The stem of an '-iën verb' ends in ie.
     return utils.compose(
+        NlHelper['removeIdenticalConsonantStem'],
         NlHelper['longVowelStem']
     ).call(this, verb, crudeStem);
 };

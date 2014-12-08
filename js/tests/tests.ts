@@ -77,8 +77,37 @@ describe("Testing Netherlands Language Helper", function() {
     });
 
     it("gets the verb stem for a long vowel", function() {
-        var stem = NlHelper['getStem']('maken');
-        expect(stem).toBe('maak');
+        // infinitive, crude stem, stem.
+        var examples = [
+            [ 'maken', 'mak', 'maak' ],
+            [ 'lopen', 'lop', 'loop' ],
+            [ 'leren', 'ler', 'leer' ],
+            [ 'koken', 'kok', 'kook' ],
+            [ 'breken', 'brek', 'breek' ],
+            [ 'vuren', 'vur', 'vuur' ],
+            [ 'horen', 'hor', 'hoor' ],
+            [ 'weten', 'wet', 'weet' ]
+        ];
+
+        examples.forEach(function(item) {
+            expect(NlHelper['getStem'](item[0])).toBe(item[2]);
+        });
+    });
+
+    it("gets the verb stem, removing identical constant endings", function() {
+        // infinitive, crude stem, stem.
+        var examples = [
+            [ 'pakken', 'pakk', 'pak' ],
+            [ 'missen', 'miss', 'mis' ],
+            [ 'wennen', 'wenn', 'wen' ],
+            [ 'lukken', 'lukk', 'luk' ],
+            [ 'stoppen', 'stopp', 'stop' ],
+            [ 'vallen', 'vall', 'val' ]
+        ];
+
+        examples.forEach(function(item) {
+            expect(NlHelper['getStem'](item[0])).toBe(item[2]);
+        });
     });
 });
 
