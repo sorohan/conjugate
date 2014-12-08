@@ -47,6 +47,17 @@ describe("Testing Netherlands Language Helper", function() {
         });
     });
 
+    it("gets the regular verb stem", function() {
+        // infinitive, crude stem, stem.
+        var examples = [
+            [ 'werken', 'werk' ]
+        ];
+
+        examples.forEach(function(item) {
+            expect(NlHelper['getStem'](item[0])).toBe(item[1]);
+        });
+    });
+
     it("lengthens a vowel stem", function() {
         // infinitive, crude stem, stem.
         var examples = [
@@ -62,17 +73,6 @@ describe("Testing Netherlands Language Helper", function() {
 
         examples.forEach(function(item) {
             expect(NlHelper['longVowelStem'](item[0], item[1])).toBe(item[2]);
-        });
-    });
-
-    it("gets the regular verb stem", function() {
-        // infinitive, crude stem, stem.
-        var examples = [
-            [ 'werken', 'werk' ]
-        ];
-
-        examples.forEach(function(item) {
-            expect(NlHelper['getStem'](item[0])).toBe(item[1]);
         });
     });
 
