@@ -23,6 +23,7 @@ gulp.task('compile', function() {
 
 gulp.task('watch', ['compile'], function() {
     gulp.watch('js/**/*.ts', ['compile']);
+    gulp.watch(['build/**/*.js', '*.html'], ['browser-reload']);
 });
 
 /**
@@ -51,6 +52,11 @@ gulp.task('browser-sync', function() {
             baseDir: "./"
         }
     });
+});
+
+// Reload all Browsers
+gulp.task('browser-reload', function () {
+    browserSync.reload();
 });
 
 gulp.task('default', ['watch', 'browser-sync'], function() {
