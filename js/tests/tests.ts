@@ -177,4 +177,128 @@ describe("Testing Netherlands Conjugator", function() {
             }
         )).toBe(true);
     });
+
+    var verbs = [
+        'accepteren',
+        'toestaan',
+        'vragen',
+        'geloven',
+        'lenen',
+        'breken',
+        'brengen',
+        'kopen',
+        'kunnen',
+        'annuleren',
+        'veranderen',
+        'kammen',
+        'klagen',
+        'hoesten',
+        'tellen',
+        'snijden',
+        'dansen',
+        'tekenen',
+        'drinken',
+        'autorijden',
+        'eten',
+        'uitleggen',
+        'vallen',
+        'vullen',
+        'zoeken',
+        'afwerken',
+        'aanpassen',
+        'bevestigen',
+        'vliegen',
+        'vergeten',
+        'geven',
+        'gaan',
+        'hebben',
+        'horen',
+        'kwetsen',
+        'weten',
+        'leren',
+        'verlaten',
+        'luisteren',
+        'leven',
+        'kijken',
+        'verliezen',
+        'maken',
+        'sluiten',
+        'organiseren',
+        'betalen',
+        'spelen',
+        'neerzetten',
+        'regen',
+        'lezen',
+        'antwoorden',
+        'rennen',
+        'zeggen',
+        'zien',
+        'verkopen',
+        'sturen',
+        'teken',
+        'zingen',
+        'zitten',
+        'slapen',
+        'roken',
+        'spreken',
+        'spellen',
+        'besteden',
+        'staan',
+        'beginnen',
+        'studeren',
+        'slagen',
+        'zwemmen',
+        'nemen',
+        'praten',
+        'onderwijzen',
+        'vertellen',
+        'denken',
+        'vertalen',
+        'reizen',
+        'proberen',
+        'uitschakelen',
+        'inschakelen',
+        'typen',
+        'begrijpen',
+        'gebruiken',
+        'wachten',
+        'worden',
+        'willen',
+        'bekijken',
+        'werken',
+        'zorgen',
+        'schrijven',
+        'uitgeven',
+        'ruiken',
+        'smaken'
+    ];
+
+    verbs.forEach(function(verb) {
+        it ("conjugates the verb: " + verb, function() {
+            console.log(verb);
+
+            var dutchConjugator = new NetherlandsConjugator();
+            var conjugation = dutchConjugator.conjugate(verb);
+
+            // todo: scrape and compare to verbix.
+
+            // Check present tense.
+            console.log(conjugation.conjugations['Present']);
+            /*
+            expect(utils.isEqual(
+                conjugation.conjugations['Simple Past'].conjugations,
+                {
+                    'ik': 'werkte',
+                    'je/u': 'werkte',
+                    'hij/ze/het': 'werkte',
+                    'we': 'werkten',
+                    'jullie': 'werkten',
+                    'ze': 'werkten'
+                }
+            )).toBe(true);
+            */
+        });
+    });
 });
+
+// todo: compound verbs.
