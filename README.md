@@ -11,5 +11,5 @@
 
 ## develop
 
-`gulp watch` - watches and compiles typescript
-`gulp tdd` - watches compiled JS and runs tests
+* `gulp watch` - watches and compiles typescript.
+* `gulp tdd` - watches compiled JS and runs tests.
