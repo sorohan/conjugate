@@ -3,6 +3,7 @@ var gulp = require('gulp');
 var karma = require('karma').server;
 var ts = require('gulp-typescript');
 var eventStream = require('event-stream');
+var browserSync = require('browser-sync');
 
 var tsProject = ts.createProject({
     declarationFiles: true,
@@ -24,9 +25,6 @@ gulp.task('watch', ['compile'], function() {
     gulp.watch('js/**/*.ts', ['compile']);
 });
 
-gulp.task('default', ['watch'], function() {
-});
-
 /**
  * Run test once and exit
  */
@@ -44,4 +42,16 @@ gulp.task('tdd', function (done) {
     karma.start({
         configFile: __dirname + '/karma.conf.js'
     }, done);
+});
+
+// Static server
+gulp.task('browser-sync', function() {
+    browserSync({
+        server: {
+            baseDir: "./"
+        }
+    });
+});
+
+gulp.task('default', ['watch', 'browser-sync'], function() {
 });

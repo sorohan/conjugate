@@ -11,5 +11,5 @@
 
 ## develop
 
-* `gulp watch` - watches and compiles typescript.
+* `gulp` - watches and compiles typescript, loads a browsersync server on http://localhost:3002/
 * `gulp tdd` - watches compiled JS and runs tests.
