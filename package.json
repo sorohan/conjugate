@@ -1,0 +1,30 @@
+{
+  "name": "conjugate",
+  "version": "1.0.0",
+  "description": "Conjugate dutch verbs",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "event-stream": "^3.2.1",
+    "gulp": "^3.8.10",
+    "gulp-typescript": "^2.3.0"
+  },
+  "devDependencies": {
+    "jasmine-core": "^2.1.3",
+    "karma": "^0.12.31",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-jasmine": "^0.3.4"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sorohan/conjugate.git"
+  },
+  "author": "Ben Sorohan <ben.sorohan@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sorohan/conjugate/issues"
+  },
+  "homepage": "https://github.com/sorohan/conjugate"
+}
